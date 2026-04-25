@@ -6,12 +6,24 @@ const cors = require('cors');
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+// CORS Configuration
+const corsOptions = {
+  origin: ['http://localhost:3000', 'http://localhost:5173', 'https://wmtlabtest-kappa.vercel.app'],
+  credentials: true,
+};
+
 // Middleware
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(express.json());
 
 // Routes
 const itemsRouter = require('./routes/items');
+
+// Health check endpoint
+app.get('/health', (req, res) => {
+  res.json({ status: 'Backend is running!' });
+});
+
 app.use('/api/items', itemsRouter);
 
 // Database Connection
